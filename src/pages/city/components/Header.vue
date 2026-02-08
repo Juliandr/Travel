@@ -1,7 +1,9 @@
 <template>
   <div class="header">
-    <router-link to="/"><div class="iconfont header-back">&#xe624;</div></router-link>
-    <div>城市选择</div>
+    城市选择
+    <router-link to="/">
+      <div class="iconfont header-back">&#xe624;</div>
+    </router-link>
   </div>
 </template>
 
@@ -20,7 +22,7 @@ export default {
     line-height: $headerHeight
     text-align: center
     color: #fff
-    background-color: $bgColor
+    background: $bgColor
     font-size: .32rem
     .header-back
       position: absolute
