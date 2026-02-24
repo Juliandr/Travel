@@ -16,8 +16,8 @@ export default {
 <style lang="stylus" scoped>
   @import '~styles/varibles.styl'
   .header
-    position: relative
-    overflow: hidden
+    display: flex
+    justify-content: center
     height: $headerHeight
     line-height: $headerHeight
     text-align: center
