@@ -53,7 +53,7 @@ export default {
       border-radius: .1rem
       color: #ccc
     .header-right
-      width: 1.24rem
+      width: 1.02rem
       float: right
       text-align: center
       color: #fff
