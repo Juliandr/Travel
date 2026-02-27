@@ -1,11 +1,11 @@
 <template>
   <div class="list" ref="wrapper">
-    <div class="content">
+    <div>
       <div class="area">
         <div class="title border-topbottom">当前城市</div>
         <div class="button-list">
           <div class="button-wrapper">
-            <div class="button">{{this.$store.state.city}}</div>
+            <div class="button">{{currentCity}}</div>
           </div>
         </div>
       </div>
@@ -22,7 +22,12 @@
           </div>
         </div>
       </div>
-      <div class="area" v-for="(item, key) of cities" :key="key" :ref="key">
+      <div
+        class="area"
+        v-for="(item, key) of cities"
+        :key="key"
+        :ref="elem => elems[key] = elem"
+      >
         <div class="title border-topbottom">{{key}}</div>
         <div class="item-list">
           <div
@@ -40,7 +45,10 @@
 </template>
 
 <script>
+import { watch, onMounted, ref } from 'vue'
 import Bscroll from 'better-scroll'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
   name: 'CityList',
   props: {
@@ -48,24 +56,33 @@ export default {
     cities: Object,
     letter: String
   },
-  methods: {
-    handleCityClick (city) {
-      this.$store.commit('changeCity', city)
-      this.$router.push('/')
+  setup(props) {
+    const store = useStore()
+    const router = useRouter()
+    const currentCity = store.state.city
+    const elems = ref({})
+    const wrapper = ref(null)
+    let scroll = null
+
+    function handleCityClick(city) {
+      store.commit('changeCity', city)
+      router.push('/')
     }
-  },
-  mounted () {
-    this.scroll = new Bscroll(this.$refs.wrapper, {
-      click: true
-    })
-  },
-  watch: {
-    letter () {
-      if (this.letter) {
-        const element = this.$refs[this.letter][0]
-        this.scroll.scrollToElement(element)
+
+    watch(() => props.letter, (letter) => {
+      if (letter && scroll) {
+        const element = elems.value[letter]
+        scroll.scrollToElement(element)
       }
-    }
+    })
+
+    onMounted(() => {
+      scroll = new Bscroll(wrapper.value, {
+        click: true
+      })
+    })
+
+    return { elems, wrapper, currentCity, handleCityClick }
   }
 }
 </script>
@@ -87,9 +104,6 @@ export default {
     left: 0
     right: 0
     bottom: 0
-    height: 588px
-    .cotent
-      height: 592px
     .title
       line-height: .54rem
       background: #eee

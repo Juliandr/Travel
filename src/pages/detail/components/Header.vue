@@ -1,61 +1,69 @@
 <template>
   <div>
-    <router-link tag="div" to="/" class="header-abs"
-    v-show="showAbs">
-      <div class="iconfont header-abs-back">&#xe624;</div>
+    <router-link
+      to="/"
+      custom v-slot="{ navigate }"
+      class="header-abs"
+      v-show="showAbs">
+      <div @click="navigate" class="iconfont header-abs-back">&#xe624;</div>
     </router-link>
-    <div class="header-fixed" v-show="!showAbs"
-    :style="opacityStyle">
-      <router-link tag="div" to="/" class="header-fixed-back">
-        <div class="iconfont header-fixed-back-icon">&#xe624;</div>
+    <div
+      class="header-fixed"
+      v-show="!showAbs"
+      :style="opacityStyle"
+    >
+      <router-link to="/" custom v-slot="{ navigate }">
+        <div @click="navigate" class="iconfont header-fixed-back">&#xe624;</div>
       </router-link>
-    景点详情
+      景点详情
     </div>
   </div>
 </template>
 
 <script>
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 export default {
   name: 'DetailHeader',
-  data () {
-    return {
-      showAbs: true,
-      opacityStyle: {
-        opacity: 0
-      }
-    }
-  },
-  methods: {
-    handleScroll () {
+  setup() {
+    const showAbs = ref(true)
+    const opacityStyle = reactive({
+       opacity: 0
+    })
+
+    function handleScroll () {
       const top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
       if (top > 60) {
         let opacity = top / 140
         opacity = opacity > 1 ? 1 : opacity
-        this.opacityStyle = { opacity }
-        this.showAbs = false
+        opacityStyle.opacity = opacity
+        showAbs.value = false
       } else {
-        this.showAbs = true
+        showAbs.value = true
       }
     }
-  },
-  mounted () {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll)
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll)
+    })
+
+    return { showAbs, opacityStyle } 
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '~styles/varibles.styl'
+  @import '~styles/varibles.styl'
   .header-abs
     position: absolute
     left: .2rem
     top: .2rem
-    width: 0.8rem
-    height: 0.8rem
-    line-height: 0.8rem
+    width: .8rem
+    height: .8rem
+    line-height: .8rem
     border-radius: .4rem
     text-align: center
     background: rgba(0, 0, 0, .8)

@@ -1,30 +1,30 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
+import { createStore } from 'vuex'
 
 let defaultCity = '北京'
 try {
   if (localStorage.city) {
     defaultCity = localStorage.city
   }
-} catch (e) {}
+} catch (e) {
+  console.error('localStorage error:', e)
+}
 
-export default new Vuex.Store({
+export default createStore({
   state: {
     city: defaultCity
   },
-  actions: {
-    // changeCity (context, city) {
-    //   context.commit('changeCity', city)
-    // }
-  },
   mutations: {
-    changeCity (state, city) {
+    changeCity(state, city) {
       state.city = city
       try {
         localStorage.city = city
-      } catch (e) {}
+      } catch (e) {console.log('localStorage is not working')}
     }
+  },
+  actions: {
+    
+  },
+  modules: {
+    
   }
 })

@@ -1,5 +1,6 @@
+<!-- src/common/fade/Fade.vue -->
 <template>
-  <transition>
+  <transition name="fade">
     <slot></slot>
   </transition>
 </template>
@@ -10,9 +11,14 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-  .v-enter, .v-leave-to
-    opacity: 0
-  .v-enter-active, .v-leave-active
-    transition: opacity .5s
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

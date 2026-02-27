@@ -4,48 +4,51 @@
       <img class="banner-img" :src="bannerImg" />
       <div class="banner-info">
         <div class="banner-tittle">
-          {{ this.sightName }}
+          {{sightName}}
         </div>
         <div class="banner-number">
           <span class="iconfont banner-icon">&#xe692;</span>
-          <!-- {{ bannerImgs.length }} -->
+          {{bannerImgs.length}}
         </div>
       </div>
     </div>
-    <FadeAnimation>
-      <common-gallary :imgs="bannerImgs" v-show="showGallary"
-      @close="handleGallaryClose"
+    <fade-animation>
+      <common-gallary
+        :imgs="bannerImgs"
+        v-show="showGallary"
+        @close="handleGallaryClose"
       ></common-gallary>
-    </FadeAnimation>
+    </fade-animation>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import CommonGallary from 'common/gallary/Gallary'
 import FadeAnimation from 'common/fade/Fade'
 export default {
   name: 'DetailBanner',
+  components: {
+    CommonGallary,
+    FadeAnimation
+  },
   props: {
     sightName: String,
     bannerImg: String,
     bannerImgs: Array
   },
-  data () {
-    return {
-      showGallary: false
+  setup() {
+    const showGallary = ref(false)
+    
+    function handleBannerClick() {
+      showGallary.value = true
     }
-  },
-  methods: {
-    handleBannerClick () {
-      this.showGallary = true
-    },
-    handleGallaryClose () {
-      this.showGallary = false
+
+    function handleGallaryClose () {
+      showGallary.value = false
     }
-  },
-  components: {
-    CommonGallary,
-    FadeAnimation
+
+    return { showGallary, handleBannerClick, handleGallaryClose }
   }
 }
 </script>
@@ -66,7 +69,7 @@ export default {
       bottom: 0
       line-height: .6rem
       color: #fff
-      background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8))
+      background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8))
       .banner-tittle
         flex: 1
         font-size: .32rem

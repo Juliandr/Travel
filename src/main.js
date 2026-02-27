@@ -1,24 +1,25 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-// 路由就是根据网址传输不同内容
-import Vue from 'vue'
-import App from './App'
+import { createApp } from 'vue'
+import App from './App.vue'
 import router from './router'
+import store from './store'
 import 'styles/reset.css'
 import 'styles/border.css'
 import 'styles/iconfont.css'
+
+// Vue Awesome Swiper
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import store from './store'
-import 'swiper/dist/css/swiper.css'
+import 'swiper/dist/css/swiper.css'  // 注意：Swiper 5+ 可能需要不同的导入方式
 
-Vue.config.productionTip = false
-Vue.use(VueAwesomeSwiper)
+// 创建应用实例
+const app = createApp(App)
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+// 注册插件
+app.use(VueAwesomeSwiper)
+app.use(router)
+app.use(store)
+
+// Vue 3 的配置
+app.config.productionTip = false  // 如果你需要这个配置
+
+// 挂载应用
+app.mount('#app')

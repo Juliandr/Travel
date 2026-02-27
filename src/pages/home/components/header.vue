@@ -9,7 +9,7 @@
       </div>
       <router-link to="/city">
         <div class="header-right">
-          {{this.$store.state.city}}
+          {{ city }}
           <span class="iconfont arrow-icon">&#xe657;</span>
         </div>
       </router-link>
@@ -17,14 +17,15 @@
 </template>
 
 <script>
-
+import { useStore } from 'vuex'
 export default {
   name: 'HomeHeader',
-  data () {
+  setup() {
+    const store = useStore()
+    const city = store.state.city
     return {
+      city
     }
-  },
-  methods: {
   }
 }
 </script>

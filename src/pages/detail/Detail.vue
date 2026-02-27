@@ -13,46 +13,51 @@
 </template>
 
 <script>
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import DetailBanner from './components/Banner'
 import DetailHeader from './components/Header'
 import DetailList from './components/List'
 export default {
-  name: 'Detail',
+  name: 'DetailView',
   components: {
     DetailBanner,
     DetailHeader,
     DetailList
   },
-  data () {
-    return {
-      sightName: '',
-      bannerImg: '',
-      gallarryImg: [],
-      list: []
-    }
-  },
-  methods: {
-    getDetailInfo () {
-      axios.get('/api/detail.json', {
+  setup () {
+    const sightName = ref('')
+    const bannerImg = ref('')
+    const gallarryImg = ref([])
+    const list = ref([])
+    const route = useRoute()
+
+    async function getDetailInfo () {
+      let res = await axios.get('/api/detail.json', {
         params: {
-          id: this.$route.params.id
+          id: route.params.id
         }
-      }).then(this.handleGetDataSucc)
-    },
-    handleGetDataSucc (res) {
+      })
       res = res.data
       if (res.ret && res.data) {
         const data = res.data
-        this.sightName = data.sightName
-        this.bannerImg = data.bannerImg
-        this.gallarryImg = data.gallaryImgs
-        this.list = data.categoryList
+        sightName.value = data.sightName
+        bannerImg.value = data.bannerImg
+        gallarryImg.value = data.gallaryImgs
+        list.value = data.categoryList
       }
     }
-  },
-  mounted () {
-    this.getDetailInfo()
+
+    onMounted(() => {
+      getDetailInfo()
+    })
+    return {
+      sightName,
+      bannerImg,
+      gallarryImg,
+      list
+    }
   }
 }
 </script>
